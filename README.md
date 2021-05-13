@@ -1,3 +1,3 @@
 # ecommerce-kata
 
-Computing a kart balance.
+Computing an e-commerce cart balance.

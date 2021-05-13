@@ -1,0 +1,23 @@
+{
+  "name": "ecommerce-kata",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "repository": "git@github.com:lioda/ecommerce-kata.git",
+  "author": "Lioda <lionel.dulout@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "typescript": "^4.2.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.2",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/jest": "^26.0.23",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3"
+  }
+}
