@@ -9,18 +9,18 @@ We need to compute the cart total balance of an online grocery.
 
 For this first step, we need to take care of 3 products:
 
-- `Pen`s, with a price of `0.75$ per unit`
-- `Soda Can`s, with a price of `1.5$ per unit`
-- `Potatoe`s, with a price of `1.99$ per kilogram`
+- `Pens`, with a price of `0.75$ per unit`
+- `Soda Cans`, with a price of `1.5$ per unit`
+- `Potatoes`, with a price of `1.99$ per kilogram`
 
 ## Second Step
 
 The grocery propose now a special offer:
 
-- A 3 `Pen`s bundle at the price of `2$`
+- A 3 `Pens` bundle at the price of `2$`
 
 ## Third Step
 
 New offer:
 
-- Buy 2 `Soda Can`s and get `1 free`
+- Buy 2 `Soda Cans` and get `1 free`
