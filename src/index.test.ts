@@ -1,9 +1,12 @@
-import { Item, Cart, ItemWithPricePerKilo, ItemWithUnitPrice, ItemWithDiscountOffer, ItemWithOneFreeOffer } from '.'
+import { Item, Cart, PricePerKilo, PricePerUnit, PriceWithDiscountOffer, PriceWithOneFree } from '.'
 
 describe('computeCart', () => {
-    function itemAtCost(cost: number): Item {
+    function countItemsAtCost(count: number, cost: number): Item {
         return {
-            cost: () => cost
+            count,
+            price: {
+                cost: (mult) => cost * mult
+            }
         }
     }
     describe('Cart', () => {
@@ -12,53 +15,53 @@ describe('computeCart', () => {
         })
         test('when cart has items then it should cost total of items', () => {
             const cart = new Cart()
-            cart.addItem(itemAtCost(145))
-            cart.addItem(itemAtCost(12))
-            cart.addItem(itemAtCost(0.89))
-            expect(cart.cost()).toBe(145 + 12 + 0.89)
+            cart.addItem(countItemsAtCost(2, 145))
+            cart.addItem(countItemsAtCost(1, 12))
+            cart.addItem(countItemsAtCost(5, 0.89))
+            expect(cart.cost()).toBe(2 * 145 + 12 + 5 * 0.89)
         })
     })
 
-    describe('ItemWithUnitPrice', () => {
+    describe('PricePerUnit', () => {
         test('when many items then return price multiplied by count', () => {
-            expect(new ItemWithUnitPrice(0.75, 2).cost()).toBe(2 * 0.75)
+            expect(new PricePerUnit(0.75).cost(2)).toBe(2 * 0.75)
         })
     })
-    describe('ItemWithPricePerKilo', () => {
+    describe('PricePerKilo', () => {
         test('when more than 2 decimals then round up', () => {
-            expect(new ItemWithPricePerKilo(1.99, 1230).cost()).toBe(2.45)
+            expect(new PricePerKilo(1.99).cost(1230)).toBe(2.45)
         })
     })
-    describe('ItemWithDiscountOffer', () => {
+    describe('PriceWithDiscountOffer', () => {
         const discount = { count: 3, newPrice: 2 }
 
         test('when discount condition is reached then apply it', () => {
-            expect(new ItemWithDiscountOffer({ price: 0.75, count: 3, discount }).cost()).toBe(2)
+            expect(new PriceWithDiscountOffer({ price: 0.75, discount }).cost(3)).toBe(2)
         })
         test('when can apply discount many times then multiply new price', () => {
-            expect(new ItemWithDiscountOffer({ price: 0.75, count: 9, discount }).cost()).toBe(2 * 3)
+            expect(new PriceWithDiscountOffer({ price: 0.75, discount }).cost(9)).toBe(2 * 3)
         })
         test('when discount condition is not reach then apply cost per unit', () => {
-            expect(new ItemWithDiscountOffer({ price: 0.75, count: 2, discount }).cost()).toBe(0.75 * 2)
+            expect(new PriceWithDiscountOffer({ price: 0.75, discount }).cost(2)).toBe(0.75 * 2)
         })
         test('when more items than discount condition then apply it and count other items by unit', () => {
-            expect(new ItemWithDiscountOffer({ price: 0.75, count: 5, discount }).cost()).toBe(0.75 * 2 + 2)
+            expect(new PriceWithDiscountOffer({ price: 0.75, discount }).cost(5)).toBe(0.75 * 2 + 2)
         })
     })
-    describe('ItemWithOneFreeOffer', () => {
+    describe('PriceWithOneFree', () => {
         const offer = { thresholdForFree: 2 }
 
         test('when threshold condition is reached then apply it', () => {
-            expect(new ItemWithOneFreeOffer({ price: 1.5, count: 3, offer }).cost()).toBe(1.5 * 2)
+            expect(new PriceWithOneFree({ price: 1.5, offer }).cost(3)).toBe(1.5 * 2)
         })
         test('when threshold condition is not reached then apply cost per unit', () => {
-            expect(new ItemWithOneFreeOffer({ price: 1.5, count: 2, offer }).cost()).toBe(1.5 * 2)
+            expect(new PriceWithOneFree({ price: 1.5, offer }).cost(2)).toBe(1.5 * 2)
         })
         test('when more items than threshold condition then apply cost per unit for remaining items', () => {
-            expect(new ItemWithOneFreeOffer({ price: 1.5, count: 4, offer }).cost()).toBe(1.5 * 2 + 1.5)
+            expect(new PriceWithOneFree({ price: 1.5, offer }).cost(4)).toBe(1.5 * 2 + 1.5)
         })
         test('when can apply offer many times then apply it as needed', () => {
-            expect(new ItemWithOneFreeOffer({ price: 1.5, count: 6, offer }).cost()).toBe(1.5 * 4)
+            expect(new PriceWithOneFree({ price: 1.5, offer }).cost(6)).toBe(1.5 * 4)
         })
     })
 
